@@ -1,0 +1,47 @@
+// Usando dois visores para exibir a distância de um sensor ultrassônico.
+
+// Pino CLK e DIO dos visores
+int CLK1 = 2, DIO1 = 3, CLK2 = 4, DIO2 = 5;
+
+// Pinos do sensor de proximidade
+int TRIGGER_PIN = 7, ECHO_PIN = 6;
+
+void setup() {
+  pinMode(TRIGGER_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+
+  // Configura o brilho dos visores
+  for (int i = 2; i <= 5; i++)
+    pinMode(i, OUTPUT);
+}
+
+void loop() {
+  long d, t;
+  
+  // Envia pulso para o sensor
+  digitalWrite(TRIGGER_PIN, LOW);
+  delayMicroseconds(2);
+  digitalWrite(TRIGGER_PIN, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(TRIGGER_PIN, LOW);
+  
+  // Calcula a distância baseada no tempo de retorno
+  t = pulseIn(ECHO_PIN, HIGH);
+  d = (t * 0.0343) / 2; // Em cm
+  
+  // Exibe a distância nos visores
+  if (d >= 0 && d < 100) {
+    showNumber(d % 100, false); // Primeiro visor
+    showNumber(d / 100, true);  // Segundo visor
+  } else {
+    showNumber(0, false); // Mostra "0" no primeiro visor
+    showNumber(99, true); // Mostra "99" no segundo visor
+  }
+  
+  delay(500); // Aguarda antes da próxima leitura
+}
+
+void showNumber(int num, bool isSecond) {
+  // Lógica para exibir o número nos visores
+  //...
+}
